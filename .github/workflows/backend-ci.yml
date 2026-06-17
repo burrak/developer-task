@@ -1,0 +1,48 @@
+name: Backend CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    env:
+      MAKEFILE_UID: "1000"
+      MAKEFILE_GID: "1000"
+      COMPOSE: docker compose -f docker-compose.ci.yml
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare env files
+        run: |
+          sed -e "s/{MAKEFILE_UID}/${MAKEFILE_UID}/g" \
+              -e "s/{MAKEFILE_GID}/${MAKEFILE_GID}/g" \
+              -e "s/XDEBUG_MODE=.*/XDEBUG_MODE=off/g" \
+              backend/.env.local.example > backend/.env.local
+
+      - name: Reset CI Docker state
+        run: $COMPOSE down --volumes
+
+      - name: Build backend image
+        run: $COMPOSE build app
+
+      - name: Install backend dependencies
+        run: $COMPOSE run --rm --no-deps app composer install --no-interaction --prefer-dist
+
+      - name: PHP CS
+        run: $COMPOSE run --rm --no-deps app composer cs
+
+      - name: PHPStan
+        run: $COMPOSE run --rm --no-deps app composer phpstan
+
+      - name: Prepare test database
+        run: |
+          $COMPOSE run --rm --no-deps app php bin/console migrations:migrate --no-interaction
+          $COMPOSE run --rm --no-deps app php bin/console fixtures:load
+
+      - name: PHPUnit
+        run: $COMPOSE run --rm --no-deps app composer test

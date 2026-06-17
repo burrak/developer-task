@@ -1,0 +1,25 @@
+name: backend-ci
+
+services:
+    app:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile.ci
+            args:
+                MAKEFILE_UID: ${MAKEFILE_UID:-1000}
+                MAKEFILE_GID: ${MAKEFILE_GID:-1000}
+        volumes:
+            - backend_ci_vendor:/app/vendor
+            - backend_ci_temp:/app/temp
+            - backend_ci_logs:/app/logs
+            - backend_ci_var:/app/var
+        working_dir: /app
+        user: root
+        env_file:
+            - ./backend/.env.local
+
+volumes:
+    backend_ci_vendor:
+    backend_ci_temp:
+    backend_ci_logs:
+    backend_ci_var:

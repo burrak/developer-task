@@ -1,0 +1,12 @@
+backend/.env.local
+backend/.php-cs-fixer.cache
+backend/.phpunit.cache/
+backend/vendor/
+backend/var/
+backend/temp/
+backend/logs/
+
+frontend/.env.local
+frontend/.next/
+frontend/node_modules/
+frontend/tsconfig.tsbuildinfo

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Application\Barbershop\Query\GetMyBookings;
 
 use App\Domain\Barbershop\Entity\Booking;
-use App\Domain\Barbershop\Enum\BookingStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class GetMyBookingsQueryHandler

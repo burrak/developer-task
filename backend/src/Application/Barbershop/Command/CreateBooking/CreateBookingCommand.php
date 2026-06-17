@@ -12,5 +12,7 @@ final class CreateBookingCommand
         public readonly string $startTime,
         public readonly string $customerName,
         public readonly string $customerContact,
+        public readonly string $idempotencyKey,
+        public readonly string $correlationId,
     ) {}
 }

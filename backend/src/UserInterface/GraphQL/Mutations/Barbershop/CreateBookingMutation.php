@@ -46,6 +46,8 @@ final class CreateBookingMutation extends Mutation
                 startTime:       $input['startTime'],
                 customerName:    $input['customerName'],
                 customerContact: $input['customerContact'],
+                idempotencyKey:  $input['idempotencyKey'],
+                correlationId:   $input['correlationId'] ?? $input['idempotencyKey'],
             ));
 
             /** @var Stylist $stylist */

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\UserInterface\GraphQL;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Throwable;
 use Tracy\Debugger;
 use Tracy\ILogger;
-use Throwable;
 
 final class TracyExceptionHandler implements ExceptionHandler
 {

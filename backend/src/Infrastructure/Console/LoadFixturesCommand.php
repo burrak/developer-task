@@ -47,6 +47,8 @@ final class LoadFixturesCommand extends Command
 
         if (!$append) {
             $io->warning('Purging database before loading fixtures...');
+            $this->em->getConnection()->executeStatement('DELETE FROM barbershop_booking_idempotency_keys');
+            $this->em->getConnection()->executeStatement('DELETE FROM barbershop_booking_locks');
         }
 
         $executor->execute($loader->getFixtures(), $append);

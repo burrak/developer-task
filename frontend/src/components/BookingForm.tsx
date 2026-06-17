@@ -55,6 +55,14 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
+function createRequestId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
 export default function BookingForm({
   stylistId,
   serviceId,
@@ -88,10 +96,20 @@ export default function BookingForm({
     setContactError(err);
     if (err) return;
     setServerErrors([]);
+    const idempotencyKey = createRequestId();
+    const correlationId = createRequestId();
 
     const variables = {
       variables: {
-        input: { stylistId, serviceId, startTime, customerName, customerContact },
+        input: {
+          stylistId,
+          serviceId,
+          startTime,
+          customerName,
+          customerContact,
+          idempotencyKey,
+          correlationId,
+        },
         serviceId,
         date,
       },

@@ -11,6 +11,7 @@ use App\Domain\Barbershop\Entity\Stylist;
 use App\Domain\Barbershop\Enum\DayOfWeek;
 use App\Infrastructure\ValueObject\Uuid;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
 final class BarbershopFixtures implements FixtureInterface
@@ -122,5 +123,16 @@ final class BarbershopFixtures implements FixtureInterface
         $manager->persist($business2);
 
         $manager->flush();
+
+        if ($manager instanceof EntityManagerInterface) {
+            $manager->getConnection()->executeStatement(
+                'INSERT INTO barbershop_booking_locks (stylist_id, version)
+                SELECT s.id, 0
+                FROM barbershop_stylists s
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM barbershop_booking_locks l WHERE l.stylist_id = s.id
+                )',
+            );
+        }
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UserInterface\GraphQL\Types\Barbershop;
 
-use App\Domain\Barbershop\Enum\BookingStatus;
 use Rebing\GraphQL\Support\EnumType;
 
 final class BookingStatusEnumType extends EnumType

@@ -22,6 +22,8 @@ final class CreateBookingInputType extends InputType
             'startTime'       => ['type' => Type::nonNull(Type::string())],
             'customerName'    => ['type' => Type::nonNull(Type::string())],
             'customerContact' => ['type' => Type::nonNull(Type::string())],
+            'idempotencyKey'  => ['type' => Type::nonNull(Type::string())],
+            'correlationId'   => ['type' => Type::string()],
         ];
     }
 }
